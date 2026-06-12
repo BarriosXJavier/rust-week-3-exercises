@@ -323,27 +323,28 @@ impl BitcoinTransaction {
 
 impl fmt::Display for BitcoinTransaction {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "BitcoinTransaction {{")?;
-        writeln!(f, "  version: {}", self.version)?;
-        writeln!(f, "  inputs: [")?;
+        writeln!(f, "Version: {}", self.version)?;
+        writeln!(f, "Inputs:")?;
         for (i, input) in self.inputs.iter().enumerate() {
+            writeln!(f, "  Input {}:", i)?;
             writeln!(
                 f,
-                "    [{}] prev: {}:{}",
-                i,
-                hex::encode(input.previous_output.txid.0),
+                "    Previous Output Txid: {}",
+                hex::encode(input.previous_output.txid.0)
+            )?;
+            writeln!(
+                f,
+                "    Previous Output Vout: {}",
                 input.previous_output.vout
             )?;
             writeln!(
                 f,
-                "         script_sig ({} bytes): {}",
+                "    ScriptSig ({} bytes): {}",
                 input.script_sig.bytes.len(),
                 hex::encode(&input.script_sig.bytes)
             )?;
-            writeln!(f, "         sequence: {:#010X}", input.sequence)?;
+            writeln!(f, "    Sequence: {:#010X}", input.sequence)?;
         }
-        writeln!(f, "  ]")?;
-        writeln!(f, "  lock_time: {}", self.lock_time)?;
-        write!(f, "}}")
+        write!(f, "Lock Time: {}", self.lock_time)
     }
 }
